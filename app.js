@@ -1,8 +1,13 @@
+require('express-async-errors');
+
 const express = require('express');
 const app = express();
 const PORT = 3000;
 
 const booksRouter = require('./routes/books');
+
+const notFoundMiddleware = require('./middleware/not-found');
+const errorMiddleware = require('./middleware/error-handler');
 
 // routes
 app.get('/', (req, res) => {
@@ -10,6 +15,9 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/books', booksRouter);
+
+app.use(notFoundMiddleware);
+app.use(errorMiddleware);
 
 const start = async () => {
     try {
